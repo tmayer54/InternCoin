@@ -1,21 +1,26 @@
-import React, { useContext, useEffect, useCallback } from 'react';
-import { WalletContext } from '../Context/WalletProvider';
-import useContract from '../utils/useContract';
+import React, { useContext, useEffect, useCallback } from "react";
+import { WalletContext } from "../Context/WalletProvider";
+import useContract from "../utils/useContract";
+const { ethers } = require("ethers");
 
 const InternCoinBalance = () => {
-  const { account, connectWallet, balance } = useContext(WalletContext);
-  const { getSignerContract } = useContract();
+  const { account, connectWallet, balance, setBalance } = useContext(WalletContext);
+  const { getReadOnlyContract } = useContract();
 
   const fetchBalance = useCallback(async () => {
     try {
-      const contract = await getSignerContract();
+      const contract = getReadOnlyContract(); // Use read-only contract
+      console.log("Contract Instance:", contract);
+
       const rawBalance = await contract.balanceOf(account);
-      const formattedBalance = parseFloat(rawBalance.toString()) / 10 ** 18;
-      console.log('Balance:', formattedBalance); // Debug
+      const formattedBalance = ethers.formatUnits(rawBalance, 18); // Assuming 18 decimals
+      console.log("InternCoin Balance:", formattedBalance);
+
+      setBalance(formattedBalance);
     } catch (error) {
-      console.error('Error fetching balance:', error);
+      console.error("Error fetching InternCoin balance:", error);
     }
-  }, [account]);
+  }, [account, getReadOnlyContract, setBalance]);
 
   useEffect(() => {
     if (account) fetchBalance();

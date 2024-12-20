@@ -1,0 +1,151 @@
+**Solidity Basics**
+
+---
+
+### **1. Structure of a Solidity Contract**
+
+```solidity
+pragma solidity ^0.8.0;
+
+contract MyContract {
+    // State Variables
+    uint public myNumber;
+
+    // Constructor
+    constructor() {
+        myNumber = 0;
+    }
+
+    // Functions
+    function setNumber(uint _number) public {
+        myNumber = _number;
+    }
+
+    function getNumber() public view returns (uint) {
+        return myNumber;
+    }
+}
+```
+
+---
+
+### **2. Key Solidity Concepts**
+
+- **State Variables**: Stored on the blockchain.
+  ```solidity
+  uint public count; // Example of a state variable
+  ```
+
+- **Functions**:
+  - `public`: Accessible by anyone.
+  - `private`: Accessible only within the contract.
+  - `view`: Does not modify the state.
+  - `pure`: Does not read or modify the state.
+
+- **Modifiers**: Restrict or enhance function behavior.
+  ```solidity
+  modifier onlyOwner() {
+      require(msg.sender == owner, "Not the owner");
+      _;
+  }
+  ```
+
+- **Events**: Log data to the blockchain.
+  ```solidity
+  event LogData(uint data);
+  emit LogData(123);
+  ```
+
+---
+
+### **3. Data Types**
+
+- **Value Types**:
+  - `uint`: Unsigned integer.
+  - `int`: Signed integer.
+  - `bool`: Boolean (`true`/`false`).
+  - `address`: Ethereum address.
+  - `bytes`: Arbitrary byte data.
+
+- **Reference Types**:
+  - `string`: Sequence of characters.
+  - `array`: Fixed or dynamic arrays.
+  - `mapping`: Key-value pairs.
+    ```solidity
+    mapping(address => uint) public balances;
+    ```
+
+---
+
+### **4. Special Variables**
+
+- `msg.sender`: Address of the caller.
+- `msg.value`: Ether sent with the transaction.
+- `block.timestamp`: Current block timestamp.
+- `tx.gasprice`: Gas price of the transaction.
+
+---
+
+### **5. Common Functions**
+
+- **Constructor**: Runs once when deployed.
+  ```solidity
+  constructor() {
+      owner = msg.sender;
+  }
+  ```
+
+- **Fallback and Receive**:
+  ```solidity
+  fallback() external payable {
+      // Handle calls to non-existent functions
+  }
+
+  receive() external payable {
+      // Handle plain Ether transfers
+  }
+  ```
+
+---
+
+### **6. Control Structures**
+
+- **If/Else**:
+  ```solidity
+  if (x > 10) {
+      // Do something
+  } else {
+      // Do something else
+  }
+  ```
+
+- **Loops**:
+  ```solidity
+  for (uint i = 0; i < 10; i++) {
+      // Do something
+  }
+  ```
+
+---
+
+### **7. Gas Optimization Tips**
+
+- Use `view` and `pure` functions whenever possible.
+- Avoid dynamic arrays and mappings if not necessary.
+- Minimize storage writes (use memory/local variables).
+
+---
+
+### **8. ERC Standards**
+
+- **ERC-20**: Fungible tokens.
+  ```solidity
+  function transfer(address recipient, uint256 amount) public returns (bool);
+  ```
+
+- **ERC-721**: Non-fungible tokens (NFTs).
+  ```solidity
+  function ownerOf(uint256 tokenId) public view returns (address);
+  ```
+
+- **ERC-1155**: Multi-token standard (supports both fungible and non-fungible tokens).

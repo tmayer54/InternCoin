@@ -45,8 +45,41 @@ export const WalletContextProvider = ({ children }) => {
     }
   };
 
+  const sendInternCoin = async (recipient, amount) => {
+    try {
+      if (!window.ethereum) {
+        alert("MetaMask is not installed!");
+        return;
+      }
+  
+      if (!ethers.isAddress(recipient)) {
+        throw new Error("Invalid recipient address");
+      }
+  
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+  
+      const contract = new ethers.Contract(contractAddress, contractABI, signer);
+  
+      // Convert amount to the smallest unit (wei) based on 18 decimals
+      const amountInWei = ethers.parseUnits(amount.toString(), 18);
+  
+      const transaction = await contract.transfer(recipient, amountInWei);
+      console.log("Transaction sent:", transaction);
+  
+      // Wait for the transaction to be mined
+      const receipt = await transaction.wait();
+      console.log("Transaction confirmed:", receipt);
+  
+      alert(`Successfully sent ${amount} InternCoin to ${recipient}`);
+    } catch (error) {
+      console.error("Error sending InternCoin:", error);
+      alert(`Transaction failed: ${error.message}`);
+    }
+  };
+
   return (
-    <WalletContext.Provider value={{ account, balance, setBalance, connectWallet, logout }}>
+    <WalletContext.Provider value={{ account, balance, setBalance, connectWallet, logout, sendInternCoin }}>
       {children}
     </WalletContext.Provider>
   );

@@ -2,8 +2,8 @@ import React from "react";
 import "./App.css";
 import InternCoinBalance from "./Components/InternCoinBalance";
 import TotalSupply from "./Components/TotalSupply";
-import { WalletContextProvider } from './Context/WalletProvider';
-
+import SendInternCoin from "./Components/SendInternCoin"; // Import the new component
+import { WalletContextProvider } from "./Context/WalletProvider";
 
 function App() {
   return (
@@ -19,8 +19,12 @@ function App() {
           <TotalSupply />
         </div>
 
+        <div className="section">
+          <SendInternCoin />
+        </div>
+
         <footer>
-          <p>InternCoin &copy; {new Date().getFullYear()}</p>
+          Powered by InternCoin © {new Date().getFullYear()}
         </footer>
       </div>
     </WalletContextProvider>

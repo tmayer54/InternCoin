@@ -42,71 +42,56 @@
 body {
   margin: 0;
   font-family: 'Arial', sans-serif;
-  background-color: #f4f4f9;
-  color: #333;
+  background-color: #f8f9fa;
+  color: #212529;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
 }
 
-/* Container styling */
+/* Main container styling */
 .container {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 90%;
   max-width: 600px;
   padding: 20px;
   text-align: center;
 }
 
-/* Title */
+/* Header styling */
 h1 {
   font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #0056b3;
+  margin-bottom: 20px;
+  color: #007bff;
 }
 
-/* Sections */
+/* Section styling */
 .section {
-  margin: 1rem 0;
+  margin-bottom: 20px;
 }
 
 .section h3 {
   font-size: 1.2rem;
-  color: #333;
-  margin-bottom: 0.5rem;
+  color: #343a40;
+  margin-bottom: 8px;
 }
 
-button {
-  background-color: #0056b3;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
+.section p {
   font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  color: #495057;
 }
 
-button:hover {
-  background-color: #004494;
-}
-
-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-/* Connected wallet badge */
+/* Connected badge */
 .connected-badge {
   background-color: #d4edda;
   color: #155724;
   padding: 10px;
   border-radius: 5px;
   font-size: 0.9rem;
-  margin-bottom: 1rem;
+  margin-bottom: 15px;
 }
 
 /* Not connected badge */
@@ -116,12 +101,49 @@ button:disabled {
   padding: 10px;
   border-radius: 5px;
   font-size: 0.9rem;
-  margin-bottom: 1rem;
+  margin-bottom: 15px;
+}
+
+/* Buttons */
+button {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.logout-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.logout-button:hover {
+  background-color: #c82333;
 }
 
 /* Footer */
 footer {
   margin-top: 20px;
-  font-size: 0.8rem;
-  color: #888;
+  font-size: 0.9rem;
+  color: #6c757d;
 }

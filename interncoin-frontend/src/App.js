@@ -1,19 +1,30 @@
-import React from 'react';
-import ConnectWallet from './Components/ConnectWallet';
-import InternCoinBalance from './Components/InternCoinBalance';
-import TotalSupply from './Components/TotalSupply';
-import Network from './Components/Network';
+import React from "react";
+import "./App.css";
+import InternCoinBalance from "./Components/InternCoinBalance";
+import TotalSupply from "./Components/TotalSupply";
+import { WalletContextProvider } from './Context/WalletProvider';
 
-const App = () => {
+
+function App() {
   return (
-    <div>
-      <h1>InternCoin Dashboard</h1>
-      <ConnectWallet />
-      <InternCoinBalance />
-      <TotalSupply />
-      <Network />
-    </div>
+    <WalletContextProvider>
+      <div className="container">
+        <h1>InternCoin Dashboard</h1>
+
+        <div className="section">
+          <InternCoinBalance />
+        </div>
+
+        <div className="section">
+          <TotalSupply />
+        </div>
+
+        <footer>
+          <p>InternCoin &copy; {new Date().getFullYear()}</p>
+        </footer>
+      </div>
+    </WalletContextProvider>
   );
-};
+}
 
 export default App;

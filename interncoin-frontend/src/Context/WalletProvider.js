@@ -1,68 +1,47 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { BrowserProvider } from 'ethers';
+import { ethers } from 'ethers';
 
 export const WalletContext = createContext();
 
-const WalletProvider = ({ children }) => {
+export const WalletContextProvider = ({ children }) => {
   const [account, setAccount] = useState(null);
-  const [provider, setProvider] = useState(null);
-  const [network, setNetwork] = useState(null);
+  const [balance, setBalance] = useState(0);
 
   const connectWallet = async () => {
-    if (window.ethereum) {
-      try {
-        const browserProvider = new BrowserProvider(window.ethereum);
-        const signer = await browserProvider.getSigner();
-        const address = await signer.getAddress();
-        const currentNetwork = await browserProvider.getNetwork();
-
-        console.log("Connected Wallet Address:", address); // Debug log
-        console.log("Connected Network:", currentNetwork); // Debug log
-
-        if (currentNetwork.chainId !== 11155111) { // Sepolia chain ID
-          alert("Please switch to the Sepolia network.");
-        }
-
-        setProvider(browserProvider);
-        setAccount(address);
-        setNetwork(currentNetwork.name);
-      } catch (error) {
-        console.error("Failed to connect wallet:", error);
+    try {
+      if (!window.ethereum) {
+        alert('MetaMask is not installed!');
+        return;
       }
-    } else {
-      alert("MetaMask is not installed!");
+      const [selectedAccount] = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      setAccount(selectedAccount);
+
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const balanceRaw = await signer.getBalance();
+      const balanceFormatted = ethers.formatUnits(balanceRaw, 18); // Convert to ETH format
+      setBalance(balanceFormatted);
+    } catch (error) {
+      console.error('Error connecting wallet:', error);
     }
   };
 
   useEffect(() => {
-    const checkConnection = async () => {
+    const checkWalletConnection = async () => {
       if (window.ethereum) {
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
         if (accounts.length > 0) {
-          const browserProvider = new BrowserProvider(window.ethereum);
-          setProvider(browserProvider);
           setAccount(accounts[0]);
+          connectWallet(); // Fetch wallet data
         }
       }
     };
-
-    const setupListeners = () => {
-      if (window.ethereum) {
-        window.ethereum.on('chainChanged', () => {
-          window.location.reload(); // Reload on network change
-        });
-      }
-    };
-
-    checkConnection();
-    setupListeners();
+    checkWalletConnection();
   }, []);
 
   return (
-    <WalletContext.Provider value={{ account, provider, network, connectWallet }}>
+    <WalletContext.Provider value={{ account, connectWallet, balance }}>
       {children}
     </WalletContext.Provider>
   );
 };
-
-export default WalletProvider;

@@ -1,4 +1,4 @@
-import { JsonRpcProvider, BrowserProvider, Contract } from 'ethers';
+import { JsonRpcProvider, Contract, ethers } from 'ethers';
 import { contractAddress, contractABI } from '../utils/contract';
 
 const useContract = () => {
@@ -10,14 +10,12 @@ const useContract = () => {
   };
 
   const getSignerContract = async () => {
-    if (window.ethereum) {
-      const browserProvider = new BrowserProvider(window.ethereum);
-      const signer = await browserProvider.getSigner();
-      return new Contract(contractAddress, contractABI, signer);
-    } else {
-      alert('MetaMask is not installed!');
-      return null;
+    if (!window.ethereum) {
+      throw new Error('MetaMask is not installed');
     }
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    return new ethers.Contract(contractAddress, contractABI, signer);
   };
 
   return { getReadOnlyContract, getSignerContract };

@@ -1,25 +1,21 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
-import useContract from '../utils/useContract';
+import React, { useContext, useEffect, useCallback } from 'react';
 import { WalletContext } from '../Context/WalletProvider';
+import useContract from '../utils/useContract';
 
 const InternCoinBalance = () => {
-  const { account } = useContext(WalletContext);
+  const { account, connectWallet, balance } = useContext(WalletContext);
   const { getSignerContract } = useContract();
-  const [balance, setBalance] = useState(0);
 
   const fetchBalance = useCallback(async () => {
     try {
-      const contract = await getSignerContract(); // Get signer-based contract for the connected wallet
-      console.log("Fetching balance for wallet:", account); // Debug log
-      const rawBalance = await contract.balanceOf(account); // Call balanceOf
-      console.log("Raw Balance (Smallest Unit):", rawBalance.toString()); // Debug log
-      const formattedBalance = parseFloat(rawBalance.toString()) / 10 ** 18; // Convert to readable format
-      setBalance(formattedBalance);
+      const contract = await getSignerContract();
+      const rawBalance = await contract.balanceOf(account);
+      const formattedBalance = parseFloat(rawBalance.toString()) / 10 ** 18;
+      console.log('Balance:', formattedBalance); // Debug
     } catch (error) {
-      console.error("Error fetching balance:", error);
+      console.error('Error fetching balance:', error);
     }
-  }, [account, getSignerContract]);
-  
+  }, [account]);
 
   useEffect(() => {
     if (account) fetchBalance();
@@ -27,8 +23,24 @@ const InternCoinBalance = () => {
 
   return (
     <div>
+      {account ? (
+        <div className="connected-badge">
+          Connected: {account}
+        </div>
+      ) : (
+        <div className="not-connected-badge">
+          Wallet Not Connected
+        </div>
+      )}
+
+      {!account && (
+        <button onClick={connectWallet}>
+          Connect Wallet
+        </button>
+      )}
+
       <h3>Your InternCoin Balance</h3>
-      {account ? <p>{balance} InternCoin</p> : <p>Connect your wallet to see your balance.</p>}
+      <p>{balance} InternCoin</p>
     </div>
   );
 };
